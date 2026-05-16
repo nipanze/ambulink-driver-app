@@ -29,17 +29,27 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _checkAuth() async {
-    await Future.delayed(const Duration(milliseconds: 1800));
-    if (!mounted) return;
-    final auth = context.read<AuthService>();
-    await auth.checkSession();
-    if (!mounted) return;
-    if (auth.isLoggedIn && auth.dbUserId != null) {
-      await context.read<DriverService>().loadDriver(auth.dbUserId!);
+    try {
+      await Future.delayed(const Duration(milliseconds: 1800));
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      Navigator.pushReplacementNamed(context, '/login');
+      
+      final auth = context.read<AuthService>();
+      await auth.checkSession().timeout(const Duration(seconds: 10));
+      
+      if (!mounted) return;
+      if (auth.isLoggedIn && auth.dbUserId != null) {
+        await context.read<DriverService>().loadDriver(auth.dbUserId!)
+            .timeout(const Duration(seconds: 10));
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+    } catch (e) {
+      debugPrint('Initialization error: $e');
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     }
   }
 
@@ -58,27 +68,20 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 100, height: 100,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEF2F2),
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Image.asset('assets/images/icon.png', fit: BoxFit.contain),
-                  ),
+                SizedBox(
+                  width: 120, height: 120,
+                  child: Image.asset('assets/images/icon.png', fit: BoxFit.contain),
                 ),
                 const SizedBox(height: 20),
                 const Text('AmbuLink',
                     style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900,
                         color: Color(0xFFDC2626), letterSpacing: -1)),
                 const SizedBox(height: 6),
-                Text('Driver App',
-                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600,
+                const Text('Driver App',
+                    style: TextStyle(fontSize: 16, color: Color(0xFF4B5563),
                         fontWeight: FontWeight.w600)),
                 const SizedBox(height: 48),
-                SizedBox(
+                const SizedBox(
                   width: 28, height: 28,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,

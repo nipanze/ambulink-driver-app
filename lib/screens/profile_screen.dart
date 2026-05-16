@@ -27,16 +27,9 @@ class ProfileScreen extends StatelessWidget {
               border: Border.all(color: Colors.grey.shade100),
             ),
             child: Column(children: [
-              Container(
-                width: 72, height: 72,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFEE2E2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Image.asset('assets/images/icon.png', fit: BoxFit.contain),
-                ),
+              SizedBox(
+                width: 90, height: 90,
+                child: Image.asset('assets/images/icon.png', fit: BoxFit.contain),
               ),
               const SizedBox(height: 12),
               Text(auth.displayName,

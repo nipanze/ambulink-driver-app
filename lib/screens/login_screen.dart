@@ -66,16 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Logo
                 Center(
                   child: Column(children: [
-                    Container(
-                      width: 80, height: 80,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFEE2E2),
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Image.asset('assets/images/icon.png', fit: BoxFit.contain),
-                      ),
+                    SizedBox(
+                      width: 100, height: 100,
+                      child: Image.asset('assets/images/icon.png', fit: BoxFit.contain),
                     ),
                     const SizedBox(height: 16),
                     const Text('AmbuLink', style: TextStyle(fontSize: 28,

@@ -49,8 +49,15 @@ Future<void> main() async {
   // Supabase
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
 
-  // Firebase (Conditional for Linux)
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS || Platform.isWindows)) {
+  // Firebase initialization (Web-safe platform checks)
+  bool isFirebasePlatform = false;
+  if (!kIsWeb) {
+    if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS || Platform.isWindows) {
+      isFirebasePlatform = true;
+    }
+  }
+
+  if (isFirebasePlatform) {
     try {
       await Firebase.initializeApp();
     } catch (e) {

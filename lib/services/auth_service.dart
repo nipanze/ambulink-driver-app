@@ -30,12 +30,17 @@ class AuthService extends ChangeNotifier {
 
   // Load profile from users table
   Future<void> _loadDbUser(String email) async {
-    final data = await _supabase
-        .from('users')
-        .select('*')
-        .eq('email', email)
-        .single();
-    _dbUser = data;
+    try {
+      final data = await _supabase
+          .from('users')
+          .select('*')
+          .eq('email', email)
+          .single();
+      _dbUser = data;
+    } catch (e) {
+      debugPrint('Error loading DB user: $e');
+      _dbUser = null;
+    }
   }
 
   // Check existing session

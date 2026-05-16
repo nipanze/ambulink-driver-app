@@ -17,7 +17,11 @@ class NotificationService {
 
   bool get _isFirebaseSupported {
     if (kIsWeb) return false;
-    return Platform.isAndroid || Platform.isIOS || Platform.isMacOS || Platform.isWindows;
+    try {
+      return Platform.isAndroid || Platform.isIOS || Platform.isMacOS || Platform.isWindows;
+    } catch (_) {
+      return false;
+    }
   }
 
   FirebaseMessaging? get _fcm {
@@ -57,9 +61,14 @@ class NotificationService {
     }
 
     // Init local notifications
+    bool isLinux = false;
+    if (!kIsWeb) {
+      try { isLinux = Platform.isLinux; } catch (_) {}
+    }
+
     final initSettings = InitializationSettings(
       android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
-      linux: (!kIsWeb && Platform.isLinux) 
+      linux: isLinux 
           ? const LinuxInitializationSettings(defaultActionName: 'Open notification')
           : null,
     );

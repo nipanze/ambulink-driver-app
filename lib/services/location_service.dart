@@ -16,8 +16,17 @@ class LocationService extends ChangeNotifier {
 
   // Request permission and start tracking
   Future<bool> startTracking(int driverId) async {
-    // Skip geolocator on Linux as it's not supported
-    if (Platform.isLinux || Platform.isWindows) {
+    // Skip geolocator on Web/Linux/Windows as it's not supported or causing issues
+    bool skipTracking = kIsWeb;
+    if (!kIsWeb) {
+      try {
+        if (Platform.isLinux || Platform.isWindows) skipTracking = true;
+      } catch (_) {
+        skipTracking = true;
+      }
+    }
+
+    if (skipTracking) {
       debugPrint('Location tracking is not supported on this platform.');
       return true; // Return true to allow "Online" status without tracking
     }

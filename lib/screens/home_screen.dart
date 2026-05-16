@@ -66,16 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
       color: Colors.white,
       child: Column(children: [
         Row(children: [
-          Container(
-            width: 42, height: 42,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFEE2E2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Image.asset('assets/images/icon.png', fit: BoxFit.contain),
-            ),
+          SizedBox(
+            width: 52, height: 52,
+            child: Image.asset('assets/images/icon.png', fit: BoxFit.contain),
           ),
           const SizedBox(width: 12),
           Expanded(
